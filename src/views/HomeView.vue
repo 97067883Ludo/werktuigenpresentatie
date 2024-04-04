@@ -25,10 +25,10 @@ async function getData() {
   <div class="flex flex-col	h-full justify-between">
     <Header/>
 
-    <div v-if="State.RequestCompleted" class="flex flex-wrap justify-center overflow-scroll">
+    <div v-if="State.RequestCompleted" class="flex flex-wrap justify-center overflow-auto">
 
-      <div v-for="item in State.data" class="flex flex-wrap justify-center overflow-scroll">
-        <Post :name="item.name" :url="item.url"/>
+      <div class="flex flex-wrap justify-center max-h-[700px]">
+        <Post v-for="item in State.data" :name="item.name" :url="item.url"/>
       </div>
 
     </div>
