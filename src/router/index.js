@@ -6,24 +6,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      component: () => import('../views/HomeView.vue')
     },
     {
-      path: '/melken',
-      name: 'melken',
-      component: () => import('../views/Melken.vue')
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/Admin.vue')
     },
-    {
-      path: '/Aardappel-stokkenrooier',
-      name: 'Aardappel-stokkenrooier',
-      component: () => import('../views/Aardappel-stokkenrooier.vue')
-    },
-    {
-      path: '/Aardappel-stokkenrooier',
-      name: 'Aardappel-stokkenrooier',
-      component: () => import('../views/Aardappel-stokkenrooier.vue')
-    }
   ]
 })
 

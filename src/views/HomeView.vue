@@ -1,30 +1,41 @@
 <script setup>
+import Header from "@/Components/Header.vue";
+import Footer from "@/Components/Footer.vue";
+import Post from "@/Components/Post.vue";
+import {usePostStore} from "@/stores/Post.js";
+import {reactive} from "vue";
+
+const poststore =  usePostStore();
+
+const State = reactive({
+  RequestCompleted: false,
+  data: []
+});
+
+getData();
+
+async function getData() {
+  State.data = await poststore.GetPosts();
+  State.RequestCompleted = true;
+}
+
 </script>
 
 <template>
-  <div class="flex flex-wrap">
-    <div  class="flex flex-wrap h-full w-full">
-    <div class="w-1/2 h-1/2 flex justify-center items-center">
-      <router-link class=" bg-blue-500 text-white rounded" to="/melken">
-        <div>
-          <img src="https://delaarman.nl/wp-content/uploads/2024/02/melken-1.jpg" alt="Afbeelding Melken" class="rounded h-30 w-30">
-          <h2 class="flex justify-center font-bold text-xl">Melken</h2>
-        </div>
-      </router-link>
+  <div class="flex flex-col	h-full justify-between">
+    <Header/>
+
+    <div v-if="State.RequestCompleted" class="flex flex-wrap justify-center overflow-scroll">
+
+      <div v-for="item in State.data" class="flex flex-wrap justify-center overflow-scroll">
+        <Post :name="item.name" :url="item.url"/>
+      </div>
+
     </div>
-    <div class="w-1/2 h-1/2 flex justify-center items-center">
-      <router-link class="bg-blue-500 text-white rounded flex" to="/Aardappel-stokkenrooier"><div>
-          <img src="https://delaarman.nl/wp-content/uploads/2024/02/Aardappel-stokkenrooier-300x272.jpg" alt="Afbeelding Aardappel-stokkenrooier" class="rounded h-30 w-30">
-          <h2 class="flex justify-center font-bold text-xl"> Aardappel-stokkenrooier</h2>
-        </div>
-      </router-link>
+    <div v-else class="flex">
+
     </div>
-    <div class="w-1/2 h-1/2 flex justify-center items-center">
-      <router-link class="p-4 bg-blue-500 text-white rounded-2xl" to="/about">Melken</router-link>
-    </div>
-    <div class="w-1/2 h-1/2 flex justify-center items-center">
-      <router-link class="p-4 bg-blue-500 text-white rounded-2xl" to="/about">Melken</router-link>
-    </div>
-  </div>
+    <Footer class=""/>
   </div>
 </template>
+
