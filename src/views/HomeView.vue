@@ -28,7 +28,7 @@ async function getData() {
     <div v-if="State.RequestCompleted" class="flex flex-wrap justify-center overflow-auto">
 
       <div class="flex flex-wrap justify-center">
-        <Post v-for="item in State.data" :name="item.name" :url="item.url"/>
+        <Post v-for="item in State.data" :name="item.name" :url="item.url" :image="item.image?.url ?? ''"/>
       </div>
 
     </div>
