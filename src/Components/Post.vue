@@ -6,11 +6,15 @@ const props = defineProps(['name', 'url', 'image', 'admin', 'id'])
 const State = reactive({
   Pressed: false,
   urlFidelity: true,
-  imagePresent: false
+  imagePresent: false,
+  imageString: ""
 })
 
 if (props.image.length === 0) {
   State.imagePresent = true
+  State.imageString = "logo-de-laarman.png"
+} else {
+  State.imageString = props.image;
 }
 
 if (props.url.length === 0) {
@@ -29,9 +33,9 @@ function setPressedState() {
 
 <template>
 
-  <div @click="setPressedState" v-if="State.urlFidelity" class="rounded bg-slate-600 m-4 p-1" :class="props.admin ? '' : 'cursor-pointer'">
+  <div @click="setPressedState" v-if="State.urlFidelity" class="rounded bg-slate-600 m-4 p-1 max-h-64 max-w-96" :class="props.admin ? '' : 'cursor-pointer'">
     <div class="bg-contain">
-      <img :src="State.imagePresent ? props.image : 'logo-de-laarman.png'" style="" alt="logo">
+      <img :src="State.imageString" style="object-fit: contain; width: 328px; height: 192px; " alt="logo">
     </div> 
     <div class="p-2 flex" :class="props.admin ? 'justify-between' : '' ">
       <h1 class="text-white">{{props.name ?? "Naamloos"}}</h1>
