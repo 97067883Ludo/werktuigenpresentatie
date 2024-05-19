@@ -28,16 +28,15 @@ export const usePostStore = defineStore("cards",  {
             return result;
         },
         
-        async newPost() {
+        async newPost(postData) {
             let result;
-            await axios.post("http://localhost:5172/Post", {
-                    Name: this.Name,
-                    Url: this.Url
-            }).then((response) => {
+            await axios.post("http://localhost:5172/Post",
+                postData
+            ).then((response) => {
                 result = true;
             }).catch((res) => {
                 result = res.response.data
-            })
+            });
 
             return result;
         }

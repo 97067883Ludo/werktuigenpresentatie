@@ -1,5 +1,6 @@
 <script setup>
 const props = defineProps(['title']);
+const emits = defineEmits(['close'])
 
 </script>
 
