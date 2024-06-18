@@ -18,6 +18,18 @@ export const usePostStore = defineStore("cards",  {
             })
             return this.Posts;
         },
+
+        async GetPost(id) {
+            let post;
+            await axios.get("http://localhost:5172/Post/id?id=" + id)
+                .then((response) => {
+                    post = response.data
+                })
+                .finally((response) => {
+                })
+            
+            return post;
+        },
         
         async DeletePost(Id) {
             let result = false;

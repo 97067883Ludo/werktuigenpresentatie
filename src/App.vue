@@ -1,12 +1,11 @@
 <script setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 const router = useRouter();
 
 function Adminpage() {
-  if (router.currentRoute.value.fullPath === "/"){ return false;}
-
-  return true;
+  return router.currentRoute.value.fullPath !== "/";
 }
+
 </script>
 
 <template>

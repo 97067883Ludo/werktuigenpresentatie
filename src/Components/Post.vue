@@ -2,10 +2,11 @@
 import { reactive } from "vue";
 import UserConfirm from "@/Components/UserConfirm.vue";
 
-const props = defineProps(['name', 'url', 'image', 'admin', 'id'])
+const props = defineProps(['name', 'url', 'image', 'admin', 'id', 'rawImage'])
 
 const emits = defineEmits(['delete']);
 
+console.log(props.rawImage)
 const State = reactive({
   Pressed: false,
   urlFidelity: true,
@@ -14,9 +15,9 @@ const State = reactive({
   DeleteItemModalShown: false,
 })
 
-if (props.image.length === 0) {
+if (props.image === null || props.image.length === 0) {
   State.imagePresent = true
-  State.imageString = "logo-de-laarman.png"
+  State.imageString = "/logo-de-laarman.png"
 } else {
   State.imageString = props.image;
 }
@@ -61,8 +62,15 @@ function setPressedState() {
   <div class="m-4 w-96">
     <article @click="setPressedState" :class="props.admin ? '' : 'cursor-pointer'" class="relative overflow-hidden rounded-lg shadow transition hover:shadow-lg cursor-pointer">
       <img
+          v-if="rawImage === undefined || rawImage === ''"
           alt=""
           :src="State.imageString"
+          class="absolute inset-0 h-full w-full object-cover"
+      />
+      <img
+          v-else
+          alt=""
+          :src="props.rawImage"
           class="absolute inset-0 h-full w-full object-cover"
       />
 
