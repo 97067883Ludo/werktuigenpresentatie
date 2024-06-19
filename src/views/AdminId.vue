@@ -16,12 +16,15 @@
         id: 0,
         url: "",
       },
+      creationDate: "",
+      updateDate: "",
       RawImage: "",
     }});
   
   const State = reactive({
     itemLoaded: false,
     newItem: false,
+    PostingNewItem: false,
   })
   
   async function getPost() {
@@ -69,7 +72,7 @@
       <div class="p-3 rounded-xl bg-gray-50">
         <div class="mt-4">
           <div class="sm:col-span-3">
-            <label for="naam" class="block text-sm font-medium leading-6 text-gray-900">Naam</label>
+            <label for="naam" class="block text-sm font-medium leading-6 text-gray-900 font-bold text-lg">Naam: </label>
             <div class="mt-2">
               <input
                   v-model="postItem.data.name"
@@ -84,7 +87,7 @@
 
         <div class="mt-4">
           <div class="sm:col-span-3">
-            <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Url/Link</label>
+            <label for="name" class="block text-sm font-medium leading-6 text-gray-900 font-bold text-lg">Url/Link: </label>
             <div class="mt-2">
               <input
                   v-model="postItem.data.url"
@@ -98,8 +101,25 @@
         </div>
 
         <div class="mt-10">
+          <div class="flex flex-col">
+            <div class="">
+              <span class="font-bold">
+                Gemaakt op:
+              </span>
+              <span> {{postItem.data.creationDate}}</span>
+            </div>
+            <div class="">
+              <span class="font-bold">
+                Laatst bewerkt:
+              </span>
+              <span> {{postItem.data.updateDate}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10">
           <div class="sm:col-span-3">
-            <label for="bestand" class="block text-sm font-medium leading-6 text-gray-900">Afbeelding</label>
+            <label for="bestand" class="block text-sm font-medium leading-6 text-gray-900 font-bold text-lg">Afbeelding: </label>
             <div class="mt-2">
               <input
                   v-on:change="selectFile"
@@ -111,12 +131,21 @@
           </div>
         </div>
 
+
+
         <div class="w-full flex justify-end ">
-        <button
-            type="submit"
-            class="mt-3 flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            @click="AddPost"
-        >
+          <button
+              class="rounded-md bg-red-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+          >
+        <span>
+          Delete
+        </span>
+          </button>
+            <button
+              type="submit"
+              class="mt-3 flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              @click="AddPost"
+            >
             <span v-if="!State.PostingNewItem">
               Save
             </span>
@@ -134,9 +163,9 @@
     </div>
     
     <div class="w-1/3">
-      <h2 class="text-xl">Voorbeeld: </h2>
+      <h2 class="text-4xl">Voorbeeld: </h2>
       <div class="p-3 rounded-xl bg-gray-50 flex justify-center">
-        <Post v-if="State.itemLoaded" :name="postItem.data.name" :url="postItem.data.url" :admin="true" :image="postItem.data.image.url ?? '' " :raw-image="postItem.data.image.url" />
+        <Post v-if="State.itemLoaded" :name="postItem.data.name" :url="postItem.data.url" :admin="true" :image="postItem.data.image?.url ?? '' " :raw-image="postItem.data.image.url" />
       </div>
     </div>
     

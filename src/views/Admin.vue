@@ -70,7 +70,8 @@ async function AddPost() {
   <div class="mt-5 overflow-hidden">
     <div class="flex justify-between items-center mx-14">
       <h1 class="text-2xl">Items:</h1>
-      <div class="bg-green-500 p-3 text-white rounded-lg cursor-pointer" @click="State.AddModal = true" >Item toevoegen +</div>
+<!--      <div class="bg-green-500 p-3 text-white rounded-lg cursor-pointer" @click="State.AddModal = true" >Item toevoegen +</div>-->
+      <router-link class="bg-green-500 p-3 text-white rounded-lg cursor-pointer" :to="{ path: '/admin/new' }">Item toevoegen +</router-link>
     </div>
     <div class="flex flex-wrap justify-center">
       <router-link v-if="!State.gettingPosts" v-for="item in State.data" :to=" {path: '/admin/' + item.id } ">
