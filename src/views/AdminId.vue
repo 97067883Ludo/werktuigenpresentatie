@@ -3,11 +3,11 @@
   import {reactive, ref} from "vue";
   import Header from "@/Components/Header.vue";
   import Post from "@/Components/Post.vue";
-  import { useRoute } from 'vue-router'
+  import {useRoute, useRouter} from 'vue-router'
 
-  const router = useRoute()
-  const id = router.params.id
-  
+  const route = useRoute()
+  const router = useRouter()
+  let id = route.params.id
   const postsStore = usePostStore();
   const postItem = reactive({data: {
       name : "",
@@ -29,12 +29,11 @@
   
   async function getPost() {
     if (id === "new") {
-      //logic for new item
-      
       State.newItem = true;
       State.itemLoaded = true;
       return;
     }
+
     postItem.data = await postsStore.GetPost(id);
 
     State.itemLoaded = true;
@@ -49,15 +48,34 @@
   }
 
   async function AddPost() {
-
     const formData = new FormData();
+
+    if (id === "new") {
+      console.log(postItem.data.name);
+      formData.append("Name", postItem.data.name);
+      formData.append("Url", postItem.data.url);
+      formData.append("FormFile", postItem.data.RawImage);
+
+      let result = await postsStore.newPost(formData);
+
+      if (result.status === 200) {
+        id = result.data.id;
+        await router.push({path: `/admin/${result.data.id}` });
+        await getPost();
+      }
+
+      return;
+    }
+
     console.log(postItem.data.name);
+    formData.append("id", id);
     formData.append("Name", postItem.data.name);
     formData.append("Url", postItem.data.url);
     formData.append("FormFile", postItem.data.RawImage);
 
-    let result = await postsStore.newPost(formData);
+    let result = await postsStore.updatePost(formData);
     console.log(result)
+
   }
 
 </script>
@@ -126,7 +144,7 @@
                   :disabled="State.PostingNewItem"
                   type="file"
                   name="Bestand"
-                  id="bestand">
+                  id="bestand" />
             </div>
           </div>
         </div>
@@ -135,11 +153,12 @@
 
         <div class="w-full flex justify-end ">
           <button
+
               class="rounded-md bg-red-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
           >
-        <span>
-          Delete
-        </span>
+            <span>
+              Delete
+            </span>
           </button>
             <button
               type="submit"
@@ -165,7 +184,7 @@
     <div class="w-1/3">
       <h2 class="text-4xl">Voorbeeld: </h2>
       <div class="p-3 rounded-xl bg-gray-50 flex justify-center">
-        <Post v-if="State.itemLoaded" :name="postItem.data.name" :url="postItem.data.url" :admin="true" :image="postItem.data.image?.url ?? '' " :raw-image="postItem.data.image.url" />
+        <Post v-if="State.itemLoaded" :name="postItem.data.name" :url="postItem.data.url" :admin="true" :image="postItem.data.image?.url ?? '' " :raw-image="postItem.data.image?.url ?? '' " />
       </div>
     </div>
     

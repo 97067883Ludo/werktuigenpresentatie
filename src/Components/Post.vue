@@ -6,7 +6,6 @@ const props = defineProps(['name', 'url', 'image', 'admin', 'id', 'rawImage'])
 
 const emits = defineEmits(['delete']);
 
-console.log(props.rawImage)
 const State = reactive({
   Pressed: false,
   urlFidelity: true,

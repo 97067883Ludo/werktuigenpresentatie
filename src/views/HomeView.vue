@@ -23,7 +23,7 @@ async function getData() {
 
 <template>
   <div class="flex flex-col	h-full justify-between">
-    <Header/>
+    <div class="w-full p-7"></div>
 
     <div v-if="State.RequestCompleted" class="flex flex-wrap justify-center overflow-auto">
 

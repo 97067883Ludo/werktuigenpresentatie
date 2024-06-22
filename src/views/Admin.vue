@@ -44,7 +44,7 @@ async function deleteItem(id)
 }
 
 async function AddPost() {
-  //State.PostingNewItem = true;
+  State.PostingNewItem = true;
   const formData = new FormData();
   console.log(State.newItem.Url);
   formData.append("Name", newItemName.value);

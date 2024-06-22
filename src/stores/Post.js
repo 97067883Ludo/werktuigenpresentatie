@@ -45,6 +45,19 @@ export const usePostStore = defineStore("cards",  {
             await axios.post("http://localhost:5172/Post",
                 postData
             ).then((response) => {
+                result = response;
+            }).catch((res) => {
+                result = res.response.data
+            });
+
+            return result;
+        },
+
+        async updatePost(postData)  {
+            let result;
+            await axios.put("http://localhost:5172/Post",
+                postData
+            ).then((response) => {
                 result = true;
             }).catch((res) => {
                 result = res.response.data
