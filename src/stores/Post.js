@@ -33,9 +33,12 @@ export const usePostStore = defineStore("cards",  {
         
         async DeletePost(Id) {
             let result = false;
-            await axios.delete("http://localhost:5172/Post?id=" + Id).then((response) => {
-                result = true;
-            })
+            await axios.delete("http://localhost:5172/Post?id=" + Id)
+                .then((response) => {
+                    result = response;
+                }).catch((response) => {
+                    result = response;
+                })
             
             return result;
         },
@@ -58,9 +61,9 @@ export const usePostStore = defineStore("cards",  {
             await axios.put("http://localhost:5172/Post",
                 postData
             ).then((response) => {
-                result = true;
-            }).catch((res) => {
-                result = res.response.data
+                result = response
+            }).catch((response) => {
+                result = response
             });
 
             return result;
