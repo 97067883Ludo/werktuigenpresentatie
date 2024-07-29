@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import axios from "axios";
+import apiConnection from "../Axios.js";
 
 export const usePostStore = defineStore("cards",  {
     state: () => ({
@@ -12,7 +12,7 @@ export const usePostStore = defineStore("cards",  {
 
     actions: {
         async GetPosts() {
-            await axios.get("http://localhost:5172/Post").then((response) => {
+            await apiConnection.get("/Post").then((response) => {
                 this.Posts = response.data
                 console.log(response.data)
             })
@@ -21,31 +21,31 @@ export const usePostStore = defineStore("cards",  {
 
         async GetPost(id) {
             let post;
-            await axios.get("http://localhost:5172/Post/id?id=" + id)
+            await apiConnection.get("/Post/id?id=" + id)
                 .then((response) => {
                     post = response.data
                 })
                 .finally((response) => {
                 })
-            
+
             return post;
         },
-        
+
         async DeletePost(Id) {
             let result = false;
-            await axios.delete("http://localhost:5172/Post?id=" + Id)
+            await apiConnection.delete("Post?id=" + Id)
                 .then((response) => {
                     result = response;
                 }).catch((response) => {
                     result = response;
                 })
-            
+
             return result;
         },
-        
+
         async newPost(postData) {
             let result;
-            await axios.post("http://localhost:5172/Post",
+            await apiConnection.post("Post",
                 postData
             ).then((response) => {
                 result = response;
@@ -58,7 +58,7 @@ export const usePostStore = defineStore("cards",  {
 
         async updatePost(postData)  {
             let result;
-            await axios.put("http://localhost:5172/Post",
+            await apiConnection.put("http://localhost:5172/Post",
                 postData
             ).then((response) => {
                 result = response
