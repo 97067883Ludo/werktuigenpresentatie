@@ -20,13 +20,14 @@
       updateDate: "",
       RawImage: "",
     }});
-  
+
   const State = reactive({
     itemLoaded: false,
     newItem: false,
     PostingNewItem: false,
+    DoneUpdatingNewItem: false,
   })
-  
+
   async function getPost() {
     if (id === "new") {
       State.newItem = true;
@@ -47,34 +48,6 @@
     postItem.data.image.url = URL.createObjectURL(file);
   }
 
-  async function AddPost() {
-    const formData = new FormData();
-
-    if (id === "new") {
-      console.log(postItem.data.name);
-      formData.append("Name", postItem.data.name);
-      formData.append("Url", postItem.data.url);
-      formData.append("FormFile", postItem.data.RawImage);
-
-      let result = await postsStore.newPost(formData);
-
-      if (result.status === 200) {
-        id = result.data.id;
-        await router.push({path: `/admin/${result.data.id}` });
-        await getPost();
-      }
-
-      return;
-    }
-
-    formData.append("id", id);
-    formData.append("Name", postItem.data.name);
-    formData.append("Url", postItem.data.url);
-    formData.append("FormFile", postItem.data.RawImage);
-
-    let result = await postsStore.updatePost(formData);
-  }
-
   async function DeletePost(id) {
 
     if(!confirm("Weet je zeker dat je dit item wilt verwijderen?")) {
@@ -89,13 +62,54 @@
 
   }
 
+  async function AddPost() {
+    const formData = new FormData();
+    State.PostingNewItem = true;
+
+    if (id === "new") {
+      console.log(postItem.data.name);
+      formData.append("Name", postItem.data.name);
+      formData.append("Url", postItem.data.url);
+      formData.append("FormFile", postItem.data.RawImage);
+
+      let result = await postsStore.newPost(formData);
+
+      if (result.status === 200) {
+        State.DoneUpdatingNewItem = true;
+        id = result.data.id;
+        await router.push({path: `/admin/${result.data.id}` });
+        State.PostingNewItem = false;
+        await getPost();
+      }
+
+      return;
+    }
+
+    formData.append("id", id);
+    formData.append("Name", postItem.data.name);
+    formData.append("Url", postItem.data.url);
+    formData.append("FormFile", postItem.data.RawImage);
+
+    let result = await postsStore.updatePost(formData);
+    console.log(result)
+    State.DoneUpdatingNewItem = true;
+    DoneUpdatingNewItemDelay();
+  }
+
+  function DoneUpdatingNewItemDelay() {
+    setTimeout(() => {
+      State.PostingNewItem = false;
+      State.DoneUpdatingNewItem = false;
+    }, 2500)
+  }
+
 </script>
 
 <template>
   <Header admin="true"></Header>
-  
+
   <div class="p-10 flex w-full justify-around">
-    
+
     <div class="w-1/3">
       <h2 class="text-4xl mb-2">Details: </h2>
       <div class="p-3 rounded-xl bg-gray-50 border-2 border-gray-300">
@@ -105,6 +119,7 @@
             <div class="mt-2">
               <input
                   v-model="postItem.data.name"
+                  :disabled="State.PostingNewItem"
                   type="text"
                   name="naam"
                   id="naam"
@@ -120,6 +135,7 @@
             <div class="mt-2">
               <input
                   v-model="postItem.data.url"
+                  :disabled="State.PostingNewItem"
                   type="text"
                   name="naam"
                   id="name"
@@ -151,6 +167,7 @@
             <label for="bestand" class="block text-sm font-medium leading-6 text-gray-900 font-bold text-lg">Afbeelding: </label>
             <div class="mt-2">
               <input
+                  class="overflow-hidden"
                   v-on:change="selectFile"
                   :disabled="State.PostingNewItem"
                   type="file"
@@ -159,8 +176,6 @@
             </div>
           </div>
         </div>
-
-
 
         <div class="w-full flex justify-end">
           <button
@@ -172,33 +187,32 @@
               Delete
             </span>
           </button>
+
             <button
               type="submit"
-              class="mt-3 justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              :disabled="State.PostingNewItem"
+              class="mt-3 flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               @click="AddPost"
             >
             <span v-if="!State.PostingNewItem">
               Save
             </span>
-          <svg v-else xmlns="http://www.w3.org/2000/svg"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke-width="1.5"
-               stroke="currentColor"
-               class="w-5 h-5 animate-spin flex justify-center">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
+              <div v-else>
+                <svg v-if="State.PostingNewItem && !State.DoneUpdatingNewItem" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" class="animate-spin" fill="#FFFFFF"><path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Z"/></svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>
+              </div>
+
         </button>
         </div>
       </div>
     </div>
-    
+
     <div class="w-1/3">
-      <h2 class="text-4xl mb-2">Voorbeeld: </h2>
+      <h2 class="text-4xl mb-2">Voorbeeld:</h2>
       <div class="p-3 rounded-xl bg-gray-50 flex justify-center border-2 border-gray-300">
         <Post v-if="State.itemLoaded" :name="postItem.data.name" :url="postItem.data.url" :admin="true" :image="postItem.data.image?.url ?? '' " :raw-image="postItem.data.image?.url ?? '' " />
       </div>
     </div>
-    
+
   </div>
 </template>
