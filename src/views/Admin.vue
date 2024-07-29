@@ -81,6 +81,7 @@ async function AddPost() {
             admin="true"
             :image="item.image?.url ?? '' "
             :id="item.id" @delete="deleteItem"
+
         />
       </router-link>
       
