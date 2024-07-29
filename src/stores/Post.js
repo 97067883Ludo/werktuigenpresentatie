@@ -23,9 +23,11 @@ export const usePostStore = defineStore("cards",  {
             let post;
             await apiConnection.get("/Post/id?id=" + id)
                 .then((response) => {
-                    post = response.data
+                    post = response
                 })
                 .finally((response) => {
+                }).catch( (response) => {
+                    post = response
                 })
 
             return post;

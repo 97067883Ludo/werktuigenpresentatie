@@ -35,7 +35,13 @@
       return;
     }
 
-    postItem.data = await postsStore.GetPost(id);
+    let data = await postsStore.GetPost(id);
+
+    if (data.status != 200) {
+      await router.push({path: `/admin` });
+    }
+
+    postItem.data = data.data;
 
     State.itemLoaded = true;
   }
