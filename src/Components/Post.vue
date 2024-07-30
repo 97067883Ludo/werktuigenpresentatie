@@ -1,10 +1,7 @@
 <script setup>
 import { reactive } from "vue";
-import UserConfirm from "@/Components/UserConfirm.vue";
 
 const props = defineProps(['name', 'url', 'image', 'admin', 'id', 'rawImage'])
-
-const emits = defineEmits(['delete']);
 
 const State = reactive({
   Pressed: false,
@@ -71,10 +68,6 @@ function setPressedState() {
       </div>
     </article>
   </div>
-
-  <UserConfirm v-if="State.DeleteItemModalShown" :itemId="props.id" @close="State.DeleteItemModalShown = false" @delete="(idToDelete) => { $emit('delete', idToDelete)} ">
-
-  </UserConfirm>
 
   <div v-if="State.Pressed">
     <iframe
