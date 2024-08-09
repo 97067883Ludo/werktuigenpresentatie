@@ -14,10 +14,25 @@ const router = createRouter({
       component: () => import('../views/Admin.vue')
     },
     {
-      path: "/admin/:id",
+      path: "/admin/post/:id",
       name: "adminId",
       component: () => import('../views/AdminId.vue')
     },
+    {
+      path: '/admin/post',
+      name: "adminPost",
+      component: () => import('../views/post/index.vue')
+    },
+    {
+      path: '/admin/categories',
+      name: "Categories",
+      component: () => import('../views/Categories/index.vue')
+    },
+    {
+      path: '/admin/categories/:id',
+      name: "categories",
+      component: () => import('../views/Categories/detail.vue')
+    }
   ]
 })
 
