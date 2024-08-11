@@ -83,7 +83,7 @@
       if (result.status === 200) {
         State.DoneUpdatingNewItem = true;
         id = result.data.id;
-        await router.push({path: `/admin/${result.data.id}` });
+        await router.push({path: `/admin/post/${result.data.id}` });
         State.PostingNewItem = false;
         await getPost();
       }
