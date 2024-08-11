@@ -14,7 +14,7 @@ export const useCategoryStore = defineStore("Categories",  {
             return this.Categories;
         },
 
-        async GetPost(id) {
+        async GetCategory(id) {
             let Category;
             await apiConnection.get("/Category/id?id=" + id)
                 .then((response) => {
