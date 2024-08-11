@@ -41,7 +41,7 @@ GetCategory();
     <p class="text-3xl text-[#5f6368]">Terug</p>
   </router-link>
   <div class="flex mt-4 mx-14 justify-center">
-      <div class="p-4 border-4 border-gray-300 rounded-xl w-1/3">
+      <div class="p-4 border-4 border-gray-300 bg-gray-50 rounded-xl w-1/3">
         <form @submit.prevent="submit">
           <div class="sm:col-span-3">
             <label for="Categorie-naam" class="block text-sm font-medium leading-6 text-gray-900">Categorie naam</label>
