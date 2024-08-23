@@ -20,8 +20,7 @@ export const useCategoryStore = defineStore("Categories",  {
                 .then((response) => {
                     Category = response
                 })
-                .finally((response) => {
-                }).catch( (response) => {
+                .catch( (response) => {
                     Category = response
                 })
 

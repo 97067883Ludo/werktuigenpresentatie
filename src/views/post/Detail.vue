@@ -63,7 +63,6 @@ async function DeletePost(id) {
   }
 
   let result = await postsStore.DeletePost(id);
-  console.log(result)
   if (result.status === 200) {
     await router.push({path: `/admin`});
   }
@@ -99,7 +98,6 @@ async function AddPost() {
   formData.append("FormFile", postItem.data.RawImage);
 
   let result = await postsStore.updatePost(formData);
-  console.log(result)
   State.DoneUpdatingNewItem = true;
   DoneUpdatingNewItemDelay();
 }
