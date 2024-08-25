@@ -7,16 +7,6 @@ import {reactive} from "vue";
 import {useScreenStore} from "@/stores/Screensocket.js";
 
 const poststore =  usePostStore();
-const screensocket = useScreenStore();
-screensocket.setupConnection();
-
-async function test() {
-  setTimeout(async () => {
-    await screensocket.getPostsFromScreen();
-  }, 2000)
-}
-
-test();
 
 const State = reactive({
   RequestCompleted: false,

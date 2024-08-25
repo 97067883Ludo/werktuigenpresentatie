@@ -1,10 +1,12 @@
 import {defineStore} from "pinia";
 import * as signalR from '@aspnet/signalr';
 
-
 export const useScreenStore = defineStore("screensocket",  {
     state: () => ({
-        Connection: null
+        Connection: null,
+        screenId: null,
+        GetPostsFromScreenId: (data) => { console.log(hallo)}
+
     }),
 
     actions: {
@@ -18,15 +20,17 @@ export const useScreenStore = defineStore("screensocket",  {
                 .build();
 
             this.Connection.start();
-            this.Connection.on("RecieveMessage", (data) => {
-                console.log(data)
-            })
+            this.Connection.on("GetPostsFromScreenId", (data) => this.GetPostsFromScreenId(data))
         },
 
         async getPostsFromScreen() {
-            let result = await this.Connection.invoke("GetPostsFromScreenId", 1);
-        }
+            if (this.Connection.connection.connectionState === 1)
+                await this.Connection.invoke("GetAllPosts");
+            else return { error: "No connection" };
+        },
 
-
+        GetPostsFromScreenId(data) {}
     }
 })
+
+
