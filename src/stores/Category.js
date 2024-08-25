@@ -39,9 +39,9 @@ export const useCategoryStore = defineStore("Categories",  {
             return result;
         },
 
-        async newPost(postData) {
+        async newCategory(postData) {
             let result;
-            await apiConnection.post("Post",
+            await apiConnection.post("Category",
                 postData
             ).then((response) => {
                 result = response;

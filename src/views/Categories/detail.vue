@@ -3,15 +3,18 @@ import {useRoute} from "vue-router";
 import Header from "@/Components/Header.vue";
 import {useCategoryStore} from "@/stores/Category.js";
 import {reactive} from "vue";
+import router from "@/router/index.js";
 
 const CategoryStore = useCategoryStore();
 const route = useRoute();
-const id = route.params.id;
+let id = route.params.id;
 
 const State = reactive({ Data: {
     name: ""
   },
-  NewItem: false
+  NewItem: false,
+  LoadingItem: false,
+  DoneUpdatingNewItem: false
 });
 
 async function GetCategory() {
@@ -21,6 +24,7 @@ async function GetCategory() {
   }
 
   let response = await CategoryStore.GetCategory(id);
+  State.NewItem = false;
   if (response.status === 200) {
     State.Data = response.data;
 
@@ -30,6 +34,50 @@ async function GetCategory() {
 }
 GetCategory();
 
+async function saveCategory() {
+  State.LoadingItem = true;
+  const formData = new FormData();
+  State.PostingNewItem = true;
+
+  if (id === "new") {
+    formData.append("Name", State.Data.name);
+    let result = await CategoryStore.newCategory(formData);
+    console.log(result)
+    if (result.status === 200) {
+      id = result.data.id;
+      State.PostingNewItem = false;
+      await router.push({path: `/admin/categories/${result.data.id}`});
+      await GetCategory();
+      return;
+    }
+  }
+
+  //updating item
+  formData.append("Name", State.Data.name);
+  formData.append("Id", State.Data.Id);
+  let result = await CategoryStore.newCategory(formData);
+
+  DoneUpdatingNewItemDelay();
+}
+
+async function deleteItem() {
+
+  if (!confirm("Weet je zeker dat je dit item wilt verwijderen?")) {
+    return;
+  }
+
+  let result = await CategoryStore.DeletePost(id);
+  if (result.status === 200) {
+    await router.push({path: `/admin/categories`});
+  }
+}
+
+function DoneUpdatingNewItemDelay() {
+  setTimeout(() => {
+    State.PostingNewItem = false;
+    State.DoneUpdatingNewItem = false;
+  }, 2500)
+}
 
 
 </script>
@@ -68,8 +116,39 @@ GetCategory();
           </div>
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button type="button" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Verwijderen</button>
-            <button type="submit" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">Save</button>
+
+            <button
+                v-if="id !== 'new'"
+                @click="deleteItem"
+                class="rounded-md mr-3 mt-3 bg-red-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
+            <span>
+              Delete
+            </span>
+            </button>
+
+            <button
+                type="submit"
+                :disabled="State.PostingNewItem"
+                class="mt-3 flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm w-20 font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                @click="saveCategory"
+            >
+            <span v-if="!State.PostingNewItem">
+              Save
+            </span>
+              <div v-else>
+                <svg v-if="State.PostingNewItem && !State.DoneUpdatingNewItem" xmlns="http://www.w3.org/2000/svg"
+                     height="20px" viewBox="0 -960 960 960" width="20px" class="animate-spin" fill="#FFFFFF">
+                  <path
+                      d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q17 0 28.5 11.5T520-840q0 17-11.5 28.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-17 11.5-28.5T840-520q17 0 28.5 11.5T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Z"/>
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px"
+                     fill="#FFFFFF">
+                  <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+                </svg>
+              </div>
+
+            </button>
           </div>
         </form>
       </div>
