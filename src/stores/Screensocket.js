@@ -5,8 +5,7 @@ export const useScreenStore = defineStore("screensocket",  {
     state: () => ({
         Connection: null,
         screenId: null,
-        GetPostsFromScreenId: (data) => { console.log(hallo)}
-
+        receivePostsCallback: (data) => {},
     }),
 
     actions: {
@@ -20,16 +19,32 @@ export const useScreenStore = defineStore("screensocket",  {
                 .build();
 
             this.Connection.start();
-            this.Connection.on("GetPostsFromScreenId", (data) => this.GetPostsFromScreenId(data))
+            this.Connection.on("GetPostsFromScreenId", (data) => { this.receivePostsCallback(data); });
         },
 
         async getPostsFromScreen() {
-            if (this.Connection.connection.connectionState === 1)
+            if (this.Connection.connection.connectionState === 1) {
                 await this.Connection.invoke("GetAllPosts");
-            else return { error: "No connection" };
+                return;
+            }
+
+            setTimeout(() => {
+                this.getPostsFromScreen()
+                console.log("No connection")
+            }, 100);
         },
 
-        GetPostsFromScreenId(data) {}
+        async Checkin() {
+            if (this.Connection.connection.connectionState === 1) {
+                await this.Connection.invoke("CheckIn", this.screenId);
+                return;
+            }
+
+            setTimeout(() => {
+                this.Checkin()
+                console.log("No connection")
+            }, 100);
+        }
     }
 })
 
