@@ -6,6 +6,7 @@ export const useScreenStore = defineStore("screensocket",  {
         Connection: null,
         screenId: null,
         receivePostsCallback: (data) => {},
+        receiveCheckInCallback: (data) => {},
     }),
 
     actions: {
@@ -20,6 +21,7 @@ export const useScreenStore = defineStore("screensocket",  {
 
             this.Connection.start();
             this.Connection.on("GetPostsFromScreenId", (data) => { this.receivePostsCallback(data); });
+            this.Connection.on("CheckIn", (data) => { this.receiveCheckInCallback(data); });
         },
 
         async getPostsFromScreen() {
