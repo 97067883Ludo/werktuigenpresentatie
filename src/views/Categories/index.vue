@@ -25,7 +25,7 @@ GetCategories();
     <router-link class="bg-green-500 p-3 text-white rounded-lg cursor-pointer" :to="{ path: '/admin/categories/new' }">Item toevoegen +</router-link>
   </div>
   <div class="flex flex-wrap mx-14" :class="State.gettingPosts ? 'justify-center' : ''">
-    <router-link v-if="!State.gettingPosts" v-for="item in State.data" :to=" {path: '/admin/categories/' + item.id } ">
+    <router-link v-if="!State.gettingPosts" v-for="item in State.data" :to="{path: '/admin/categories/' + item.id }" class="mr-2">
       <Category
           :name="item.name"
           :id="item.id"
