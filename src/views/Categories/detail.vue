@@ -14,7 +14,8 @@ const State = reactive({ Data: {
   },
   NewItem: false,
   LoadingItem: false,
-  DoneUpdatingNewItem: false
+  DoneUpdatingNewItem: false,
+
 });
 
 async function GetCategory() {
@@ -107,9 +108,9 @@ function DoneUpdatingNewItemDelay() {
                 <span> {{ State.Data.creationDate }}</span>
               </div>
               <div class="">
-              <span class="font-bold">
-                Laatst bewerkt:
-              </span>
+                <span class="font-bold">
+                  Laatst bewerkt:
+                </span>
                 <span> {{ State.Data.updateDate }}</span>
               </div>
             </div>

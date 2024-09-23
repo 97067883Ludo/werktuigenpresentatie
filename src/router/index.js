@@ -37,6 +37,11 @@ const router = createRouter({
       path: '/screen/:id',
       name: "screen",
       component: () => import('../views/screen/Detail.vue')
+    },
+    {
+      path: '/admin/screen',
+      name: "screen",
+      component: () => import('../views/screen/admin/Index.vue')
     }
   ]
 })
