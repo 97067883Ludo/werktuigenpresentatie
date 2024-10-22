@@ -40,7 +40,7 @@ const router = createRouter({
     },
     {
       path: '/admin/screen',
-      name: "screen",
+      name: "screen-admin",
       component: () => import('../views/screen/admin/Index.vue')
     }
   ]

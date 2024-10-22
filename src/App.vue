@@ -3,7 +3,9 @@ import { RouterView, useRouter } from 'vue-router'
 const router = useRouter();
 
 function Adminpage() {
-  return router.currentRoute.value.fullPath !== "/";
+
+  let test =  router.currentRoute.value.fullPath.includes("/screen/");
+  return test
 }
 
 </script>

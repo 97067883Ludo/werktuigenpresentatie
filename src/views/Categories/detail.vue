@@ -31,7 +31,6 @@ async function GetCategory() {
 
     console.log(State.Data);
   }
-
 }
 GetCategory();
 
